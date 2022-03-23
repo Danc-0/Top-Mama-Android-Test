@@ -6,7 +6,7 @@ data class Current(
     val humidity: Int,
     val is_day: String,
     val observation_time: String,
-    val precip: Int,
+    val precip: Float,
     val pressure: Int,
     val temperature: Int,
     val uv_index: Int,

@@ -5,6 +5,6 @@ import io.reactivex.Single
 
 interface WeatherRepository {
 
-    fun getWeather() : Single<Weather>
+    suspend fun getWeather() : Weather
 
 }

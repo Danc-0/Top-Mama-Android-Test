@@ -13,7 +13,7 @@ import javax.inject.Inject
 class WeatherUseCase @Inject constructor(
     private val service: WeatherService) {
 
-    operator fun invoke(): Flow<Resource<Single<Weather>>> = flow {
+    operator fun invoke(): Flow<Resource<Weather>> = flow {
         try {
             emit(Resource.Loading())
             val weather = service.getWeather()

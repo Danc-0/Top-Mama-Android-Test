@@ -6,9 +6,9 @@ import com.example.topmama.domain.repositories.WeatherRepository
 import io.reactivex.Single
 import javax.inject.Inject
 
-class WeatherRepositoryImpl @Inject constructor( val service: WeatherService) : WeatherRepository {
+class WeatherRepositoryImpl @Inject constructor(private val service: WeatherService) : WeatherRepository {
 
-    override fun getWeather(): Single<Weather> {
-        TODO("Not yet implemented")
+    override suspend fun getWeather(): Weather {
+        return service.getWeather()
     }
 }
