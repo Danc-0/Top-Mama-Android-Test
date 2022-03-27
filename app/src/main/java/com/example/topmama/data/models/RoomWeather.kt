@@ -3,6 +3,7 @@ package com.example.topmama.data.models
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.topmama.domain.models.AirQuality
 import com.example.topmama.domain.models.Condition
@@ -12,9 +13,10 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@Entity(tableName = "city_weather_table")
+@Entity(tableName = "city_weather_table", indices = [Index(value = ["key"], unique = true)])
 data class RoomWeather(
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo( name= "key")
     val Key: Int,
     val country: String? = null,
     val lat: Double? = null,

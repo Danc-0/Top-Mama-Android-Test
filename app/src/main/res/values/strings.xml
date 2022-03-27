@@ -3,4 +3,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="ready_to_take_on_your_day_here_is_some_weather_info_about_your_city"><u>Ready to take on your day here is some weather info about your city</u></string>
+    <string name="notification_subtitle">Hello its time, please check on the status of your favourite city weather information</string>
+    <string name="weather_reminder">Favourite Weather Reminder</string>
 </resources>

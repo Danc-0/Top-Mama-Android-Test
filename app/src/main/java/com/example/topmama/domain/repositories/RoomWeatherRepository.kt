@@ -18,4 +18,8 @@ class RoomWeatherRepository @Inject constructor (private val weatherDao: Weather
         weatherDao.addFavouriteWeather(roomWeather)
     }
 
+    suspend fun updateWithFavourite(roomWeather: RoomWeather){
+        weatherDao.updateWeatherInfo(roomWeather)
+    }
+
 }

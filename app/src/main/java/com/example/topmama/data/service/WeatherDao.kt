@@ -1,10 +1,7 @@
 package com.example.topmama.data.service
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.example.topmama.data.models.FavouriteRoomWeather
 import com.example.topmama.data.models.RoomWeather
 
@@ -16,6 +13,9 @@ interface WeatherDao {
 
    @Insert(onConflict = OnConflictStrategy.REPLACE)
    suspend fun addFavouriteWeather(roomWeather: FavouriteRoomWeather)
+
+   @Update
+   suspend fun updateWeatherInfo(roomWeather: RoomWeather)
 
    @Query("SELECT * FROM city_weather_table")
    fun readAllData(): LiveData<List<RoomWeather>>

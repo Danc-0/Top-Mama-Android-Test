@@ -9,7 +9,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.topmama.R
 import com.example.topmama.data.models.FavouriteRoomWeather
 import com.example.topmama.data.models.RoomWeather
 import com.example.topmama.domain.models.Weather
@@ -22,14 +21,21 @@ import kotlinx.coroutines.launch
 import android.content.SharedPreferences
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.Observer
+import com.example.topmama.R
 import com.example.topmama.domain.models.City
+import java.util.*
 import kotlin.math.log
 
 
@@ -40,6 +46,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainViewAdapter.CallBack 
     private val TAG = "MainFragment"
     private val viewModel: MainFragViewModel by viewModels()
     private var weatherAdapter: MainViewAdapter? = null
+    var weatherList: List<RoomWeather>? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -177,7 +184,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainViewAdapter.CallBack 
             getWeatherData(city.key, "4541ef963d0445cf9a7142701222603", city.name, "yes")
         }
 
-        searchWeather.addTextChangedListener(object: TextWatcher {
+        searchWeather.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 cardView.isVisible = false
             }
@@ -188,7 +195,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainViewAdapter.CallBack 
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                if (p0?.length!! <= 0){
+                if (p0?.length!! <= 0) {
                     cardView.visibility = View.GONE
                 }
             }
@@ -198,11 +205,18 @@ class MainFragment : Fragment(R.layout.fragment_main), MainViewAdapter.CallBack 
         searchWeather.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val text = v.text.toString()
-                searchWeatherData(1222, "4541ef963d0445cf9a7142701222603", text, "yes")
+                searchWeatherData(text)
+
             }
             false
         }
 
+    }
+
+    private fun mainSwap(weatherList: List<RoomWeather>, cityWeather: RoomWeather) {
+        val index = weatherList.indexOf(cityWeather)
+        Collections.swap(weatherList, 0, index)
+        readAllData(weatherList)
     }
 
     private fun getWeatherData(cityKey: Int, apiKey: String, cityName: String, aqi: String) {
@@ -213,81 +227,32 @@ class MainFragment : Fragment(R.layout.fragment_main), MainViewAdapter.CallBack 
                 run {
                     Log.e(TAG, "getWeatherData: ${weather.location.name}")
 //                    addWeather(cityKey, weather)
-//                    cardView.visibility = View.VISIBLE
                 }
             })
         }
-        readAllData()
-    }
-
-    private fun searchWeatherData(cityKey: Int, apiKey: String, cityName: String, aqi: String) {
-        lifecycleScope.launch {
-            viewModel.getWeatherData(apiKey, cityName, aqi)
-
-            viewModel.weatherData.observe(viewLifecycleOwner, { weather ->
-                run {
-                    cardView.visibility = View.VISIBLE
-                    tvHeader.text = "It's $cityName"
-                    temp.text = "${weather.current.temp_c} ℃"
-                    humidity.text = weather.current.humidity.toString()
-                    windDirection.text = weather.current.wind_dir
-                    windSpeed.text = weather.current.wind_kph.toString()
-                }
-            })
-        }
-    }
-
-    private fun addWeather(cityKey: Int, weather: Weather) {
-        val roomWeather = RoomWeather(
-            cityKey,
-            weather.location.country,
-            weather.location.lat,
-            weather.location.localtime,
-            weather.location.localtime_epoch,
-            weather.location.lon,
-            weather.location.name,
-            weather.location.region,
-            weather.location.tz_id,
-            weather.current.cloud,
-            weather.current.feelslike_c,
-            weather.current.feelslike_f,
-            weather.current.gust_kph,
-            weather.current.gust_mph,
-            weather.current.humidity,
-            weather.current.is_day,
-            weather.current.last_updated,
-            weather.current.last_updated_epoch,
-            weather.current.precip_in,
-            weather.current.precip_mm,
-            weather.current.pressure_in,
-            weather.current.pressure_mb,
-            weather.current.temp_c,
-            weather.current.temp_f,
-            weather.current.uv,
-            weather.current.vis_km,
-            weather.current.vis_miles,
-            weather.current.wind_degree,
-            weather.current.wind_dir,
-            weather.current.wind_kph,
-            weather.current.wind_mph,
-            weather.current.condition.code,
-            weather.current.condition.icon,
-            weather.current.condition.text
-        )
-        viewModel.addingWeather(roomWeather)
-
-    }
-
-    private fun readAllData() {
-        viewModel.readAllData?.observe(viewLifecycleOwner, { weather ->
-            weatherAdapter = MainViewAdapter(weather, this)
-            val linearLayoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            rvCitiesWeather.layoutManager = linearLayoutManager
-            rvCitiesWeather.adapter = weatherAdapter
-
-            Log.d(TAG, "readAllData: $weather")
+        viewModel.readAllData.observe(viewLifecycleOwner, { weather ->
+            weatherList = weather
+            readAllData(weatherList!!)
         })
+    }
+
+    private fun searchWeatherData(cityName: String) {
+        val roomWeather = weatherList?.find { it -> it.name == cityName }
+        cardView.visibility = View.VISIBLE
+        tvHeader.text = "It's $cityName"
+        temp.text = "${roomWeather?.temp_c} ℃"
+        humidity.text = roomWeather?.humidity.toString()
+        windDirection.text = roomWeather?.wind_dir
+        windSpeed.text = roomWeather?.wind_kph.toString()
+
+    }
+
+    private fun readAllData(weatherList: List<RoomWeather>) {
+        weatherAdapter = MainViewAdapter(weatherList, this)
+        val linearLayoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        rvCitiesWeather.layoutManager = linearLayoutManager
+        rvCitiesWeather.adapter = weatherAdapter
 
     }
 
@@ -297,20 +262,9 @@ class MainFragment : Fragment(R.layout.fragment_main), MainViewAdapter.CallBack 
         Navigation.findNavController(requireView()).navigate(R.id.detailsFragment, bundle)
     }
 
-    override fun addToFavourite(weather: RoomWeather) {
-//        var isFavourite: Boolean = readState();
-//        if (!isFavourite) {
-//            favouriteToggleButton.setBackgroundDrawable(ContextCompat.getDrawable(context!!,R.drawable.ic_favorite_black_24dp));
-//            isFavourite = true;
-//            saveState(isFavourite);
-//        }
-//        else {
-//            favouriteToggleButton.setBackgroundDrawable(ContextCompat.getDrawable(context!!,R.drawable.ic_favorite_border_black_24dp));
-//            isFavourite = false;
-//            saveState(isFavourite);
-//        }
+    override fun addToFavourite(weather: RoomWeather, isFavourite: Boolean) {
 
-        val favouriteRoomWeather = FavouriteRoomWeather(
+        val favouriteRoomWeather = RoomWeather(
             0,
             weather.country,
             weather.lat,
@@ -347,19 +301,25 @@ class MainFragment : Fragment(R.layout.fragment_main), MainViewAdapter.CallBack 
             weather.text
         )
 
-        viewModel.addingWeatherFavourite(favouriteRoomWeather)
+        if (!isFavourite) {
+            viewModel.updateWithFavourite(favouriteRoomWeather)
+            Toast.makeText(
+                context,
+                "City added to your favourite and is at the top of the list",
+                Toast.LENGTH_SHORT
+            ).show()
+            mainSwap(weatherList!!, weather)
+        } else {
+            Toast.makeText(context, "Item already added to your favourites", Toast.LENGTH_SHORT)
+                .show()
+        }
+
     }
 
-//    private fun saveState(isFavourite: Boolean) {
-//        val aSharedPreferences: SharedPreferences = this.getSharedPreferences("Favourite", Context.MODE_PRIVATE)
-//        val aSharedPreferencesEdit = aSharedPreferences.edit()
-//        aSharedPreferencesEdit.putBoolean("State", isFavourite)
-//        aSharedPreferencesEdit.apply()
-//    }
-//
-//    private fun readState(): Boolean {
-//        val asharedPreferences: SharedPreferences = this.getSharedPreferences("Favourite", Context.MODE_PRIVATE)
-//        return asharedPreferences.getBoolean("State", false)
-//    }
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        val inflater: MenuInflater = inflater
+        return inflater.inflate(R.menu.options, menu)
+    }
 
 }

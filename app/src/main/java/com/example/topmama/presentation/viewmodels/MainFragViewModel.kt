@@ -110,4 +110,10 @@ class MainFragViewModel @Inject constructor(
         }
     }
 
+    fun updateWithFavourite(weather: RoomWeather){
+        viewModelScope.launch(Dispatchers.IO){
+            repository.updateWithFavourite(weather)
+        }
+    }
+
 }
