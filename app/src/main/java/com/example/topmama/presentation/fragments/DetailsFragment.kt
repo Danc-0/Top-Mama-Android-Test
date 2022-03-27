@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import coil.load
 import com.example.topmama.R
 import com.example.topmama.data.models.RoomWeather
 import kotlinx.android.synthetic.main.fragment_details.*
@@ -29,6 +30,7 @@ class DetailsFragment : Fragment() {
         val weatherData = arguments
         val weather: RoomWeather = weatherData?.get("SingleView") as RoomWeather
 
+        weatherBackground.load(weather.backgroundImage)
         tvHeader.text = weather.region
         tvHeaderCity.text = weather.region
         temp.text = "${weather.temp_c} ℃"

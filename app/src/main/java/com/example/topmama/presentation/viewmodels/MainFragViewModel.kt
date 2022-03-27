@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.topmama.data.models.FavouriteRoomWeather
 import com.example.topmama.data.models.RoomWeather
 import com.example.topmama.data.service.WeatherDatabase
+import com.example.topmama.domain.models.City
 import com.example.topmama.domain.models.Weather
 import com.example.topmama.domain.repositories.RoomWeatherRepository
 import com.example.topmama.domain.usecases.WeatherUseCase
@@ -32,7 +33,7 @@ class MainFragViewModel @Inject constructor(
     private val repository: RoomWeatherRepository
 
 
-    fun getWeatherData(apiKey: String, city: String, aqi: String) {
+    fun getWeatherData(searchedCity: City, apiKey: String, city: String, aqi: String) {
         useCase(apiKey, city, aqi).onEach { weather ->
             run {
                 when (weather) {
@@ -44,6 +45,7 @@ class MainFragViewModel @Inject constructor(
                         weatherData.postValue(weather.data!!)
                         val roomWeather = RoomWeather(
                             0,
+                            searchedCity.image,
                             weather.data.location.country,
                             weather.data.location.lat,
                             weather.data.location.localtime,

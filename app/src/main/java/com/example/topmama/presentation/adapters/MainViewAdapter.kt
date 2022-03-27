@@ -19,6 +19,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.example.topmama.R
 import com.example.topmama.data.models.RoomWeather
 import kotlinx.android.synthetic.main.weather_items.view.*
@@ -51,6 +52,8 @@ class MainViewAdapter(private val weatherItems: List<RoomWeather>, val callBack:
                 callBack?.addToFavourite(weatherItems, isFavourite)
                 isFavourite = true
             }
+
+            itemView.weatherBackground.load(weatherItems.backgroundImage)
         }
 
        private fun ImageView.setTint(@ColorRes colorRes: Int) {
@@ -71,8 +74,6 @@ class MainViewAdapter(private val weatherItems: List<RoomWeather>, val callBack:
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
         weatherData = weatherItems[position]
-        val myImage: Drawable? = ResourcesCompat.getDrawable(context?.resources!!, R.drawable.weather_0, null)
-        holder.itemView.mainItemView.background = myImage
         holder.setData(weatherData)
 
     }

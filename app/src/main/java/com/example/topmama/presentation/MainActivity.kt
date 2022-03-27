@@ -48,11 +48,6 @@ class MainActivity : AppCompatActivity() {
                 "Check your internet connection to access latest weather information"
             )
         }
-        val data = Data.Builder()
-            .putInt(NOTIFICATION_ID, 0)
-            .build()
-        val delay = 5000L
-        scheduleNotification(delay, data)
     }
 
     private fun showSnackBar(view: View, message: String) {
@@ -70,41 +65,8 @@ class MainActivity : AppCompatActivity() {
         snackBar.show()
     }
 
-    private fun scheduleNotification(delay: Long, data: Data) {
-        val instanceWorkManager = WorkManager.getInstance(this)
-
-        val notificationConstraints = Constraints.Builder()
-            .setRequiresBatteryNotLow(true)
-            .build()
-
-        val periodicNotificationWork = PeriodicWorkRequestBuilder<NotifyWork>(10, TimeUnit.SECONDS)
-            .setConstraints(notificationConstraints)
-            .setInitialDelay(delay, TimeUnit.MILLISECONDS)
-            .setInputData(data)
-            .build()
-
-        instanceWorkManager.enqueue(periodicNotificationWork)
-    }
-
     companion object {
         const val NOTIFICATION_ID = "appName_notification_id"
-    }
-
-    @ExperimentalTime
-    private fun userInterface(view: View) {
-        val currentTime = currentTimeMillis()
-        val customTime = 1648388160997
-        val data = Data.Builder().putInt(NOTIFICATION_ID, 0).build()
-        val delay = customTime - currentTime
-//        scheduleNotification(delay, data)
-
-        val titleNotificationSchedule = getString(R.string.weather_reminder)
-        val patternNotificationSchedule = getString(R.string.notification_subtitle)
-
-        make(
-            view, "Hello",
-            LENGTH_INDEFINITE
-        )
     }
 }
 

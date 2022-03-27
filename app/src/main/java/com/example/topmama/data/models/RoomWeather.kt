@@ -18,6 +18,7 @@ data class RoomWeather(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo( name= "key")
     val Key: Int,
+    val backgroundImage: String,
     val country: String? = null,
     val lat: Double? = null,
     val localtime: String? = null,
