@@ -1,7 +1,7 @@
 package com.example.topmama.di
 
 import com.example.topmama.utils.Constants
-import com.example.topmama.data.apiservice.WeatherService
+import com.example.topmama.data.service.WeatherService
 import com.example.topmama.data.repository.WeatherRepositoryImpl
 import com.example.topmama.domain.repositories.WeatherRepository
 import dagger.Module

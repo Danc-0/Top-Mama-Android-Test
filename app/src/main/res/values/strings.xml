@@ -2,4 +2,5 @@
     <string name="app_name">Top Mama</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ready_to_take_on_your_day_here_is_some_weather_info_about_your_city"><u>Ready to take on your day here is some weather info about your city</u></string>
 </resources>
