@@ -1,5 +1,7 @@
 package com.example.topmama.presentation.fragments
 
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -49,9 +51,13 @@ class MainFragment : Fragment(R.layout.fragment_main), MainViewAdapter.CallBack 
     private var weatherAdapter: MainViewAdapter? = null
     var weatherList: List<RoomWeather>? = null
     var searchedCity: City? = null
+    lateinit var apiKey: String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val ai: ApplicationInfo = context?.packageManager!!.getApplicationInfo(context!!.packageName, PackageManager.GET_META_DATA)
+        apiKey = ai.metaData["apiKey"].toString()
 
         val cities = listOf(
             City(
@@ -184,7 +190,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainViewAdapter.CallBack 
         cities.forEach { city ->
             cities.size
             searchedCity = city
-            getWeatherData(searchedCity!!,"4541ef963d0445cf9a7142701222603", city.name, "yes")
+            getWeatherData(searchedCity!!,apiKey, city.name, "yes")
         }
 
         searchWeather.addTextChangedListener(object : TextWatcher {
@@ -242,10 +248,10 @@ class MainFragment : Fragment(R.layout.fragment_main), MainViewAdapter.CallBack 
         if (roomWeather != null){
             cardView.visibility = View.VISIBLE
             tvHeader.text = "It's $cityName"
-            temp.text = "${roomWeather?.temp_c} ℃"
-            humidity.text = roomWeather?.humidity.toString()
-            windDirection.text = roomWeather?.wind_dir
-            windSpeed.text = roomWeather?.wind_kph.toString()
+            temp.text = "${roomWeather.temp_c} ℃"
+            humidity.text = roomWeather.humidity.toString()
+            windDirection.text = roomWeather.wind_dir
+            windSpeed.text = roomWeather.wind_kph.toString()
         } else {
             Snackbar.make(view, "$cityName is not available in the list yet", Snackbar.LENGTH_LONG).show()
 

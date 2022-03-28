@@ -5,6 +5,7 @@ plugins {
     id "androidx.navigation.safeargs"
     id 'dagger.hilt.android.plugin'
     id 'kotlin-kapt'
+    id 'com.google.secrets_gradle_plugin' version '0.4'
 }
 
 android {
