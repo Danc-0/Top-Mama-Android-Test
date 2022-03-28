@@ -11,17 +11,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.work.*
 import com.example.topmama.R
-import com.example.topmama.utils.notify.NotifyWork
-import com.example.topmama.utils.notify.work.NotifyWork.Companion.NOTIFICATION_WORK
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.Snackbar.make
 import dagger.hilt.android.AndroidEntryPoint
-import java.lang.System.currentTimeMillis
-import java.util.concurrent.TimeUnit
-import kotlin.time.ExperimentalTime
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

@@ -32,3 +32,6 @@ The API I am using is `http://api.weatherapi.com/v1/current.json?key=&q=London&a
 
 Added some screenshots in the `screenshots` folder, in the root directory of the project.
 
+Main Screen | Search View | Detail Screen
+--- | --- | ---
+

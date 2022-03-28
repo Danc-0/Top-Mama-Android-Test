@@ -3,7 +3,6 @@ package com.example.topmama.presentation.fragments
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -20,8 +19,6 @@ import kotlinx.coroutines.launch
 import android.os.Build
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -33,7 +30,7 @@ import androidx.work.WorkManager
 import com.example.topmama.R
 import com.example.topmama.domain.models.City
 import com.example.topmama.presentation.MainActivity
-import com.example.topmama.utils.notify.NotifyWork
+import com.example.topmama.utils.notify.work.NotifyWork
 import com.google.android.material.snackbar.Snackbar
 import java.time.Duration
 import java.time.LocalDateTime
@@ -46,7 +43,6 @@ import java.util.concurrent.TimeUnit
 @FragmentScoped
 class MainFragment : Fragment(R.layout.fragment_main), MainViewAdapter.CallBack {
 
-    private val TAG = "MainFragment"
     private val viewModel: MainFragViewModel by viewModels()
     private var weatherAdapter: MainViewAdapter? = null
     var weatherList: List<RoomWeather>? = null
