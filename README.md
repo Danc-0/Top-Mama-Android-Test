@@ -34,4 +34,4 @@ Added some screenshots in the `screenshots` folder, in the root directory of the
 
 Main Screen | Search View | Detail Screen
 --- | --- | ---
-
+<img src="https://github.com/Danc-0/Top-Mama-Android-Test/blob/main/screenshots/main_screen.jpg" width="280"/> | <img src="https://github.com/Danc-0/Top-Mama-Android-Test/blob/main/screenshots/search_view.jpg" width="280"/> | <img src="https://github.com/Danc-0/Top-Mama-Android-Test/blob/main/screenshots/details_screen.jpg" width="280"/>
