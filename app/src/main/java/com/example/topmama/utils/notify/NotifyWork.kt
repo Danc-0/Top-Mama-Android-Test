@@ -21,8 +21,7 @@ class NotifyWork(var context: Context, params: WorkerParameters) : Worker(contex
 
     override fun doWork(): Result {
         val id = inputData.getLong(NOTIFICATION_ID, 0).toInt()
-        //Log.d("TAG", "doWork: $id")
-        showNotification(context, "Hey there", "I finished my work", id)
+        showNotification(context, "Favourite Weather Reminder", "Hello its time, please check on the status of your favourite city weather information", id)
         return success()
     }
 
@@ -35,7 +34,7 @@ class NotifyWork(var context: Context, params: WorkerParameters) : Worker(contex
                 "CH_ID",
                 NotificationManager.IMPORTANCE_DEFAULT
             )
-            channel.description = "Example Alarm"
+            channel.description = "Weather Alarm"
             mNotificationManager.createNotificationChannel(channel)
         }
         val mBuilder = NotificationCompat.Builder(context, "1")
